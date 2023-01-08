@@ -35,13 +35,15 @@
                                     <td>{{ $post->user->name }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="{{ route('posts.show', $post->id) }}">View</a>
-                                        <a class="btn btn-sm btn-success" href="{{ route('posts.edit', $post->id) }}">Edit</a>
+                                        @if($post->user->id == auth()->user()->id || auth()->user()->is_admin)
+                                            <a class="btn btn-sm btn-success" href="{{ route('posts.edit', $post->id) }}">Edit</a>
 
-                                        <form style="display:inline-block" action="{{ route('posts.destroy', $post->id) }}" method="POST">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button class="btn btn-sm btn-danger"> Delete</button>
-                                        </form>
+                                            <form style="display:inline-block" action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button class="btn btn-sm btn-danger"> Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -19,6 +19,7 @@ class CommentFactory extends Factory
     {
         return [
             'post_id' => rand(1,10),
+            'user_id' => rand(1,10),
             'comment' => Str::random(10)
         ];
     }

@@ -17,6 +17,7 @@
                         <thead>
                             <th>#</th>
                             <th>Comment</th>
+                            <th>Owner</th>
                             <th>Post Title</th>
                             <th>Post Body</th>
                             <th>Actions</th>
@@ -31,17 +32,20 @@
                                 <tr>
                                     <td>{{ $comment->id }}</td>
                                     <td>{{ $comment->comment }}</td>
+                                    <td>{{ $comment->user->name }}</td>
                                     <td>{{ $comment->post->title ?? '' }}</td>
                                     <td>{{ $comment->post->body ?? '' }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="{{ route('comments.show', $comment->id) }}">View</a>
-                                        <a class="btn btn-sm btn-success" href="{{ route('comments.edit', $comment->id) }}">Edit</a>
+                                        @if($comment->user->id == auth()->user()->id || auth()->user()->is_admin)
+                                            <a class="btn btn-sm btn-success" href="{{ route('comments.edit', $comment->id) }}">Edit</a>
 
-                                        <form style="display:inline-block" action="{{ route('comments.destroy', $comment->id) }}" method="POST">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button class="btn btn-sm btn-danger"> Delete</button>
-                                        </form>
+                                            <form style="display:inline-block" action="{{ route('comments.destroy', $comment->id) }}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button class="btn btn-sm btn-danger"> Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

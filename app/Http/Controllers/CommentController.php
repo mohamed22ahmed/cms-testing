@@ -5,18 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 
 class CommentController extends Controller
 {
     public function index()
     {
-        $comments = Comment::with( 'post')->paginate(5);
+        $comments = Comment::with( 'post', 'user')->paginate(5);
         return view('comments.index', compact('comments'));
     }
 
     public function show(Comment $comment)
     {
-        $comment = Comment::where('id', $comment->id)->with('post')->first();
+        $comment = Comment::where('id', $comment->id)->with('post', 'user')->first();
         return view('comments.show', compact('comment'));
     }
 
@@ -28,7 +29,8 @@ class CommentController extends Controller
     public function store(CreateUpdateCommentRequest $request){
         Comment::create([
             'comment'=> $request->comment,
-            'post_id' => $request->post_id
+            'post_id' => $request->post_id,
+            'user_id'=> auth()->user()->id
         ]);
 
         return redirect(route('comments.index'))->with(['success'=> 'comment created successfully']);
