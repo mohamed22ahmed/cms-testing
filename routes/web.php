@@ -21,13 +21,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::controller(PostController::class)->name('posts.')->prefix('/posts')->group(function () {
-    Route::get('/', 'index')->name('index');
-});
+Route::resource('posts', PostController::class)->middleware('auth');
+Route::resource('comments', CommentController::class)->middleware('auth');
 
-Route::controller(CommentController::class)->name('comments.')->prefix('/comments')->group(function () {
-    Route::get('/', 'index')->name('index');
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
