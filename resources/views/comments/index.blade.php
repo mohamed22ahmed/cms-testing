@@ -25,7 +25,7 @@
                         <tbody>
                             @if ($comments->count() == 0)
                                 <tr>
-                                    <td colspan="5">No products to display.</td>
+                                    <td colspan="5">No Comments to display.</td>
                                 </tr>
                             @endif
                             @foreach ($comments as $comment)

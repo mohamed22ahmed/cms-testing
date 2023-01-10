@@ -24,7 +24,7 @@
                         <tbody>
                             @if ($posts->count() == 0)
                                 <tr>
-                                    <td colspan="5">No products to display.</td>
+                                    <td colspan="5">No Posts to display.</td>
                                 </tr>
                             @endif
                             @foreach ($posts as $post)
