@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('postCheck', ['only' => ['update', 'delete']]);
+    // }
+
     public function index()
     {
         $posts = Post::with('user', 'comments')->paginate(4);
@@ -27,7 +32,8 @@ class PostController extends Controller
     }
 
     public function store(CreateUpdatePostRequest $request){
-        Post::create(['title' => $request->title,
+        Post::create([
+            'title' => $request->title,
             'body'=> $request->body,
             'user_id' => auth()->user()->id
         ]);
@@ -41,6 +47,10 @@ class PostController extends Controller
     }
 
     public function update(CreateUpdatePostRequest $request, Post $post){
+        if ($post->user_id != auth()->user()->id && !auth()->user()->is_admin){
+            return redirect(route('posts.index'))->with(['error' => 'you don\'t have been authorized']);
+        }
+
         $post->update([
             'title' => $request->title,
             'body'=> $request->body
@@ -50,8 +60,11 @@ class PostController extends Controller
     }
 
     public function destroy(Post $post){
+        if ($post->user_id != auth()->user()->id && !auth()->user()->is_admin){
+            return redirect(route('posts.index'))->with(['error' => 'you don\'t have been authorized']);
+        }
+        
         $post->delete();
-
         return redirect(route('posts.index'))->with(['success'=> 'post deleted successfully']);
     }
 }

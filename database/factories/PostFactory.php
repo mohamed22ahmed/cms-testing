@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,9 +19,16 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => rand(1,10),
+            'user_id' => $this->getUserId(),
             'title' => Str::random(10),
             'body' => Str::random(30)
         ];
+    }
+
+    private function getUserId(){
+        $user = User::latest()->first();
+        if($user)
+            return $user->id +1;
+        return 1;
     }
 }
